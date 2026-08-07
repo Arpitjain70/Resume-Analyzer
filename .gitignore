@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+target/
+build/
+*.jar
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Uploaded Files
+uploads/
+backend/uploads/
+
+# IDE / System files
+.idea/
+.vscode/
+*.swp
+*.cls
+.DS_Store
+Thumbs.db
+*.log

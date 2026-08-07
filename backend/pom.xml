@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        Spring Boot Parent:
+        This gives us default dependency versions, plugin configs,
+        and the embedded Tomcat server. No need to specify versions
+        for most Spring libraries because the parent manages them.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.ats</groupId>
+    <artifactId>resume</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ATS Resume Analyzer</name>
+    <description>Beginner-friendly ATS Resume Analyzer with Spring Boot and React</description>
+
+    <properties>
+        <!-- Java 17 — LTS version installed on this machine -->
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ========== SPRING BOOT CORE ========== -->
+
+        <!--
+            Web Starter: Gives us Spring MVC, REST controllers,
+            embedded Tomcat, Jackson (JSON serialization).
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--
+            Security Starter: Gives us Spring Security filters,
+            authentication managers, and password encoders (BCrypt).
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--
+            Data JPA Starter: Gives us Spring Data JPA with Hibernate ORM.
+            We just write interfaces (repositories), Spring generates SQL.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--
+            Validation Starter: Gives us @Valid, @NotBlank, @Email, etc.
+            Automatically validates request bodies using Bean Validation (Jakarta).
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- ========== DATABASE ========== -->
+
+        <!--
+            PostgreSQL Driver: JDBC driver that connects Spring to Supabase PostgreSQL.
+            'runtime' scope means it's only needed at runtime, not compile time.
+        -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ========== JWT ========== -->
+
+        <!--
+            JJWT (Java JWT): Three jars work together:
+            - api: core interfaces
+            - impl: implementation of those interfaces
+            - jackson: JSON parsing for JWT payloads
+        -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ========== PDF PARSING ========== -->
+
+        <!--
+            Apache PDFBox: Extracts text from PDF files.
+            We'll use this to read the resume content before
+            sending it to the Gemini AI.
+        -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- ========== UTILITIES ========== -->
+
+        <!--
+            Lombok: Reduces boilerplate with annotations like
+            @Getter, @Setter, @Builder, @AllArgsConstructor.
+            The 'optional=true' means it's not passed to dependents.
+        -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ========== TEST ========== -->
+
+        <!--
+            Spring Boot Test Starter: JUnit 5, Mockito, AssertJ,
+            Spring test utilities. Scope 'test' means only used in tests.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+                Spring Boot Maven Plugin: Packages the app as a fat JAR
+                (includes all dependencies) so you can run it with
+                'java -jar resume.jar'. Also excludes Lombok from the final JAR.
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
